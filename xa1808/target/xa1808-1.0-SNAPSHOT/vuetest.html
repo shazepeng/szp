@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-model="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="vue\vue-2.2.2-min.js"></script>
+<body>
+<div id="dd">
+    <h4>{{message}}<br></h4>
+    <input type="text" v-model="message" style="height: 30px;width: 300px"/>
+</div>
+<div>
+<table id = "shop">
+    <tr>
+        <td width="100">商品名称</td>
+        <td>商品数量</td>
+        <td>商品单价</td>
+        <td>商品总价</td>
+        <td>操作</td>
+    </tr>
+    <tr>
+        <td>{{name}}</td>
+        <td>{{number}}</td>
+        <td>{{price}}</td>
+        <td>{{number * price}}</td>
+        <td>
+            <input type="button" value="-" v-on:click="subNumber()">
+            <input type="text" v-model="number" size="1">
+            <input type="button" value="+" v-on:click="addNumber()">
+        </td>
+    </tr>
+</table>
+</div>
+<script>
+    var vue1=new Vue({
+        el:'#dd',
+        data:{
+            message:"你好骚啊"
+        }
+    })
+    var vue2=new Vue({
+        el:'#shop',
+        data:{
+            name:"华为mate x",
+            number:1,
+            price:10000
+        },
+        methods:{
+            addNumber:function () {
+                ++ this.number;
+            },
+            subNumber:function () {
+                if(this.number >1 ){
+                    -- this.number;
+                }else {
+                    alert("至少购买一件商品")
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

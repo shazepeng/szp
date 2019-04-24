@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue/vue-2.2.2-min.js"></script>
+    <script src="jquery/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+
+<table id = "shopcart" border="1px">
+    <tr>
+        <td>
+            商品名称
+        </td>
+        <td>
+            商品数量
+        </td>
+        <td>
+            商品单价
+        </td>
+        <td>
+            商品总价
+        </td>
+        <td>
+            操作
+        </td>
+    </tr>
+    <tr v-for="product in products">
+        <td>{{product.productName}}</td>
+        <td>{{product.count}}</td>
+        <td>{{product.price}}</td>
+        <td>{{product.count*product.price}}</td>
+        <td>
+            <button @click="product.count-=1">
+                -
+            </button>
+            {{product.count}}
+            <button @click="product.count+=1">
+                +
+            </button>
+        </td>
+
+    </tr>
+    <tr>
+        <td colspan="5">
+            总价：￥{{totalPrice()}}
+            <button @click="clearAll">清空购物车</button>
+        </td>
+    </tr>
+</table>
+</body>
+<script>
+    new Vue({
+        el:"#shopcart",
+        data:{
+            products:[
+                {productName:"华为meta x",count:1,price:17500},
+                {productName:"小米",count:1,price:2999},
+                {productName:"iphone",count:1,price:9800},
+                {productName:"oppo",count:1,price:3000}
+            ]
+        },
+        methods:{
+            totalPrice:function(){
+                var total = 0;
+                for(var i=0;i<this.products.length;i++){
+                    total += this.products[i].count*this.products[i].price;
+
+                }
+                return total;
+            },
+            clearAll:function(){
+                this.products = new Array();
+            }
+        }
+
+    })
+</script>
+</body>
+</html>

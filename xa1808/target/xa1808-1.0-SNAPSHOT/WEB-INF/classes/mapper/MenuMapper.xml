@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xa.menu.mapper.MenuMapper">
+    <resultMap id="menuMap" type="com.xa.menu.dto.MenuDto">
+        <id column="menuid" property="id"/>
+        <result column="menuname" property="name"/>
+        <result column="skipurl" property="url"/>
+        <result column="icon" property="icon"/>
+        <result column="checked" property="checked"/>
+        <collection property="children" ofType="com.xa.menu.dto.MenuDto" column="menuid1">
+            <id column="menuid1" property="id"/>
+            <result column="menuname1" property="name"/>
+            <result column="menuUrl1" property="url"/>
+            <result column="menuicon1" property="icon"/>
+            <result column="mupid" property="pid"/>
+            <result column="checked" property="checked"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllMenu" resultMap="menuMap" parameterType="int">
+          select tb1.*,
+          (case when rid is null then 'false'
+			    when rid is not null then 'true'
+			    else rid end
+          )as 'checked'
+         from(select m1.*,m2.menuid menuid1,m2.menuname menuname1,m2.skipurl menuUrl1,m2.icon menuicon1,m2.upid mupid from menu m1,menu m2
+           where m1.menuid = m2.upid)tb1 left join role_menu rm on tb1.menuid1=rm.mid and rid=#{id}
+    </select>
+
+    <delete id="romoveTempTableByRoleId" parameterType="int">
+        delete from role_menu where rid = #{id}
+    </delete>
+
+    <insert id="batchSave" parameterType="com.xa.menu.vo.ImpowerVo">
+        insert into role_menu(id,rid,mid) values
+        <foreach collection="menus" item="menuId" separator=",">
+            (null, #{roleId}, #{menuId})
+        </foreach>
+
+    </insert>
+</mapper>

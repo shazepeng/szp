@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xa.userinfo.mapper.UserInfoMapper">
+
+    <select id="selectRoleId" parameterType="int" resultType="com.xa.pojo.UserRole">
+        select ur.* from users u,users_role ur where u.userid=ur.uid and u.userid=#{uid}
+    </select>
+
+    <select id="selectLogin" resultType="com.xa.pojo.UserInfo">
+        select * from users where username=#{userName}
+    </select>
+    <select id="selectUserInfo" resultType="com.xa.pojo.UserInfo">
+        select * from users where userName = #{userName} and password = #{password}
+    </select>
+
+    <select id="selectUserLike" resultType="com.xa.pojo.UserInfo">
+        select * from users
+        <where>
+            <if test="account != null">
+                or account like concat('%',#{account},'%')
+            </if>
+            <if test="userName != null">
+                or userName like concat('%',#{userName},'%')
+            </if>
+            <if test="email != null">
+                or email like concat('%',#{email},'%')
+            </if>
+        </where>
+    </select>
+    <select id="selectUserByName" resultType="com.xa.pojo.UserInfo">
+        select * from users where userName = #{userName}
+    </select>
+
+
+
+    <select id="getAllUserInfo" resultType="com.xa.pojo.UserInfo">
+        select * from users
+    </select>
+
+    <insert id="addUserInfo" parameterType="com.xa.pojo.UserInfo">
+        insert into users values(null,#{account},#{userName},#{password},#{email})
+    </insert>
+
+    <select id="getOneUserInfoByid" parameterType="int" resultType="com.xa.pojo.UserInfo">
+        select * from users where userid=#{userId}
+    </select>
+    <update id="updateUserInfo" parameterType="com.xa.pojo.UserInfo">
+        update users
+        <set>
+            <if test="userName!=null and userName!=''">
+                userName=#{userName},
+            </if>
+            <if test="account!=null and account!=''">
+                account=#{account},
+            </if>
+            <if test="password!=null and password!=''">
+                password=#{password},
+            </if>
+            <if test="email!=null and email!=''">
+                email=#{email}
+            </if>
+        </set>
+        where userid = #{userId}
+    </update>
+
+    <delete id="deleteUserInfoByid" parameterType="int">
+        delete from users where userid=#{userId}
+    </delete>
+
+</mapper>
