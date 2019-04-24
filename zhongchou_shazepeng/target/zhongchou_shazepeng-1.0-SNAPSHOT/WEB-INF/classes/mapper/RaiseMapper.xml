@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.j1808.mapper.RaiseMapper">
+    <insert id="addRaise" parameterType="com.qf.j1808.vo.RaiseVo">
+        insert into raise values(null,#{raiseType},#{raiseName},#{raiseInfo},#{raiseMoney},#{raiseDay},#{mySelf},#{dateiled},#{contactNumber},#{serviceTel},#{reportType},#{reportMoney},#{reportContent},#{reportNumber},#{singlePurchase},#{freight},#{invoice},#{reportTime},#{userId},'未通过',#{raisePic});
+    </insert>
+
+    <select id="selectRaise" resultType="com.qf.j1808.dto.RaiseDto">
+        select r.raiseid,r.raiseName,a.applyName,r.raiseMoney,r.raiseDay from raise r,apply a,userinfo u where r.raiseCheck = '未通过' and r.userid = u.userid and a.userid = u.userid
+    </select>
+
+    <select id="getOneRaise" parameterType="int" resultType="com.qf.j1808.pojo.Raise">
+        select * from raise where raiseId=#{raiseId}
+    </select>
+    <update id="updateRaise" parameterType="com.qf.j1808.pojo.Raise">
+        update raise set raiseCheck = #{raiseCheck} where raiseId = #{raiseId}
+    </update>
+
+    <select id="selectAll" resultType="com.qf.j1808.pojo.Raise">
+        select * from raise where raiseCheck = '通过'
+    </select>
+
+    <select id="selectNum" resultType="int" parameterType="int">
+        select count(*) from user_raise ur,raise r where ur.raiseid = r.raiseid and r.raiseid = #{raiseId}
+    </select>
+
+    <insert id="addSupport" parameterType="com.qf.j1808.pojo.UserRaise">
+        insert into user_raise values(null,#{userId},#{raiseId})
+    </insert>
+
+    <select id="selectStartRaise" parameterType="int" resultType="com.qf.j1808.pojo.Raise">
+        select * from raise where userid = #{userId}
+    </select>
+    
+    <select id="selectSupportRaise" parameterType="int" resultType="com.qf.j1808.pojo.Raise">
+        select r.* from user_raise ur,raise r where ur.raiseid=r.raiseid and ur.userid=#{userId} GROUP BY raiseId;
+    </select>
+</mapper>
